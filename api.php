@@ -11,6 +11,7 @@
  * @link     http://rudloff.pro
  * */
 require_once 'download.php';
+require_once 'classes/Video.php';
 if (isset($_GET["url"])) {
     if (isset($_GET["format"])) {
         $video = VideoDownload::getJSON($_GET["url"], $_GET["format"]);
@@ -22,7 +23,7 @@ if (isset($_GET["url"])) {
             $error=true;
         }
     } else {
-        $video = VideoDownload::getJSON($_GET["url"]);
+        $video = new Video($_GET["url"]);
         if (isset($video->webpage_url)) {
             include 'head.php';
             ?>
@@ -74,10 +75,10 @@ if (isset($_GET["url"])) {
                 foreach ($video->formats as $format) {
                     echo '<li itemprop="encoding"
                         itemscope itemtype="http://schema.org/VideoObject">';
-                    echo '<a itemprop="contentUrl" href="', $format->url ,'">';
-                    echo '<span itemprop="videoQuality">', $format->format,
+                    echo '<a itemprop="contentUrl" href="', $format['url'] ,'">';
+                    echo '<span itemprop="videoQuality">', $format['format_id'],
                         '</span> (<span itemprop="encodingFormat">', 
-                        $format->ext, '</span>)';
+                        $format['ext'], '</span>)';
                     echo '</a></li>';
                 }
                 ?>
